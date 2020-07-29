@@ -1,29 +1,33 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
+
+const UjianSchema = new mongoose.Schema({
     name : {
         type : String,
         required : true,
         min : 6 ,
         max : 255
     },
-    email : {
+    _idKelas : {
         type : String,
         required : true,
         min : 6,
-        max : 255
-    }, 
-    role : {
-        type : String,
-        required : true,
-        min : 5,
-        max : 255
-    }, 
-    password : {
+    },
+    waktu : {
         type : String,
         required : true,
         min : 6,
-        max : 1024
+    },
+    tgl : {
+        type : String,
+        required : true,
+        min : 6,
+    },
+    lama_ujian : {
+        type : String,
+        required : true,
+        min : 1,
+        max : 1
     },
     date : {
         type : Date,
@@ -31,4 +35,4 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("Ujian", UjianSchema)

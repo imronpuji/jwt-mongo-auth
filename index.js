@@ -7,6 +7,7 @@ const dashboard = require('./routes/dashboard')
 const verifyToken = require('./routes/validate-token')
 const cors = require("cors")
 const admin = require('./routes/admin')
+const sekolah = require('./routes/sekolah')
 dotenv.config();
 
 app.use(cors())
@@ -18,6 +19,7 @@ mongoose.connect(process.env.DB_CONNECT,{
 }, () => console.log('database connected'))
 
 app.use('/api/user', authRoutes)
-app.use('/api/admin',verifyToken,  admin)
+app.use('/api/admin',verifyToken, admin)
+app.use('/api/sekolah',verifyToken, sekolah)
 app.use('/api/dashboard', verifyToken, dashboard)
 app.listen(3000, () => console.log('server is connected'))

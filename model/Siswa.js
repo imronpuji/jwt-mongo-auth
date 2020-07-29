@@ -1,25 +1,25 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
+const siswaSchema = new mongoose.Schema({
     name : {
         type : String,
         required : true,
         min : 6 ,
         max : 255
-    },
+    }, 
     email : {
+        type : String,
+        required : true,
+        min : 6 ,
+        max : 255
+    },  
+    _idKelas : {
         type : String,
         required : true,
         min : 6,
         max : 255
     }, 
-    role : {
-        type : String,
-        required : true,
-        min : 5,
-        max : 255
-    }, 
-    password : {
+    NISN : {
         type : String,
         required : true,
         min : 6,
@@ -31,4 +31,4 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("Siswa", siswaSchema)

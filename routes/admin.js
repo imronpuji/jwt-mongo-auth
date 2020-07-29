@@ -11,6 +11,10 @@ router.post('/add-provinsi', async (req, res) => {
         NP : req.body.NP
     })
 
+    const isProvinsi = await Provinsi.findOne({NP:req.body.NP})
+
+    if(isProvinsi) return res.status(400).json({msg : 'maaf no provinsi sudah terdaftar'})
+
     try {
         const savedProvinsi = await provinsi.save()
         res.json({error : null, saved : savedProvinsi})
@@ -63,6 +67,9 @@ router.post('/add-kota', async (req, res) => {
         NK : req.body.NK,
         _idProvinsi : req.body._idProvinsi
     })
+    const isKota = await Kota.findOne({NK:req.body.NK})
+
+    if(isKota) return res.status(400).json({msg : 'maaf no kota sudah terdaftar'})
 
     try {
         const savedKota = await kota.save()
@@ -128,6 +135,9 @@ router.post('/add-sekolah', async (req, res) => {
         role : 'sekolah'
     })
 
+    const isSekolahExist = await Sekolah.findOne({NPSN: req.body.NPSN})
+    if(isSekolahExist) return res.status(400).json({error : 'npsn sudah terdaftar'})
+
     try {
         const savedSekolah = await sekolah.save()
         const savedUser = await user.save()
@@ -146,9 +156,11 @@ router.get('/get-sekolah', async (req, res) => {
 })
 
 router.delete('/delete-sekolah/:id', async (req, res) => {
-    Sekolah.deleteOne({_id:req.params.id}, (err, respon) => {
-        if(err) return res.json({err : err})
-        res.json({result : respon})
+    Sekolah.deleteOne({_id:req.params.id}, () => {
+        User.deleteOne({_id:req.params.id}, (err, respon) => {
+            if(err) return res.json({err : err})
+            res.json({result : respon})
+        })
     })
 })
 
