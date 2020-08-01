@@ -5,6 +5,17 @@ const Kota = require('../model/Kota')
 const Sekolah = require('../model/Sekolah')
 const bcrypt = require('bcryptjs')
 const User = require('../model/User')
+
+
+
+router.get('/get-user', async (req, res) => {
+    User.find({}, (err, respon) => {
+        if(err) return res.json({err : err})
+        res.json({result : respon})
+    })
+})
+
+
 router.post('/add-provinsi', async (req, res) => {
     const provinsi = new Provinsi({
         name : req.body.name,
@@ -32,8 +43,11 @@ router.get('/get-provinsi', async (req, res) => {
 
 router.delete('/delete-provinsi/:id', async (req, res) => {
     Provinsi.deleteOne({_id:req.params.id}, (err, respon) => {
-        if(err) return res.json({err : err})
-        res.json({result : respon})
+        Kota.deleteMany({_idProvinsi : req.params.id}, (err, respon) => {
+
+            if(err) return res.json({error : err})
+            res.json({result : respon})
+        } )
     })
 })
 
@@ -88,8 +102,11 @@ router.get('/get-kota', async (req, res) => {
 
 router.delete('/delete-kota/:id', async (req, res) => {
     Kota.deleteOne({_id:req.params.id}, (err, respon) => {
-        if(err) return res.json({err : err})
-        res.json({result : respon})
+        Sekolah.deleteMany({_idKota : req.params.id}, (err, respon) => {
+
+            if(err) return res.json({error : err})
+            res.json({result : respon})
+        } )
     })
 })
 
@@ -155,13 +172,15 @@ router.get('/get-sekolah', async (req, res) => {
     })
 })
 
-router.delete('/delete-sekolah/:id', async (req, res) => {
-    Sekolah.deleteOne({_id:req.params.id}, () => {
-        User.deleteOne({_id:req.params.id}, (err, respon) => {
-            if(err) return res.json({err : err})
-            res.json({result : respon})
+router.delete('/delete-sekolah/:id/:email', async (req, res) => {
+
+        await Sekolah.deleteOne({_id:req.params.id}, async (err, respon) => {
+           await User.deleteOne({email : req.params.email}, (err, respon) => {
+            if(err) return res.json({error:err})
+             res.json({result : respon})
+           })
         })
-    })
+
 })
 
 router.put('/update-sekolah/:id', async (req, res) => {
